@@ -10,6 +10,7 @@ public class CustomHashMap<T, V> {
     public CustomHashMap() {
         this.mapCapacity = 16;
         this.map = new LinkedList[mapCapacity];
+        initMap();
     }
 
     public void add(T key, V value) {
@@ -52,6 +53,11 @@ public class CustomHashMap<T, V> {
         throw new KeyNotFoundException("Key not found!");
     }
 
+    public void clearAll() {
+        initMap();
+    }
+
+
     private void throwExceptionWhenKeyExists(T key, LinkedList<KeyValue<T, V>> list) {
         for(KeyValue keyValue : list) {
             if(keyValue.getKey().equals(key)) {
@@ -59,6 +65,13 @@ public class CustomHashMap<T, V> {
             }
         }
     }
+
+    private void initMap() {
+        for(int i = 0; i < mapCapacity; i++) {
+            map[i] = new LinkedList<>();
+        }
+    }
+
 
     private void resizeMap() {
         if(mapSize == mapCapacity) {
