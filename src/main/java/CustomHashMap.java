@@ -21,12 +21,23 @@ public class CustomHashMap<T, V> {
         throwExceptionWhenKeyExists(key, list);
 
         KeyValue<T, V> keyValue = new KeyValue<>(key, value);
-        list.add(keyValue);
+        if(list == null) {
+            list = new LinkedList<>();
+            list.add(keyValue);
+            map[index] = list;
+        }else{
+            list.add(keyValue);
+        }
+
         mapSize++;
     }
 
     private void throwExceptionWhenKeyExists(T key, LinkedList<KeyValue<T, V>> list) {
+        if(list == null) {
+            return;
+        }
         for(KeyValue keyValue : list) {
+
             if(keyValue.getKey().equals(key)) {
                 throw new KeyAlreadyExistsException("Key already exists in the map!");
             }
