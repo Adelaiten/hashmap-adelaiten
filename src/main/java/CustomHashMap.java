@@ -32,6 +32,19 @@ public class CustomHashMap<T, V> {
         mapSize++;
     }
 
+    public V getValue(T key) throws KeyNotFoundException{
+        int hash = key.hashCode();
+        int index = hash % mapCapacity;
+        LinkedList<KeyValue<T,V>> list = map[index];
+        for(KeyValue<T, V> keyValue : list) {
+            if(keyValue.getKey().equals(key)) {
+                return keyValue.getValue();
+            }
+        }
+        throw new KeyNotFoundException("Key not found!");
+    }
+
+
     private void throwExceptionWhenKeyExists(T key, LinkedList<KeyValue<T, V>> list) {
         if(list == null) {
             return;
