@@ -21,13 +21,8 @@ public class CustomHashMap<T, V> {
         throwExceptionWhenKeyExists(key, list);
 
         KeyValue<T, V> keyValue = new KeyValue<>(key, value);
-        if(list == null) {
-            list = new LinkedList<>();
-            list.add(keyValue);
-            map[index] = list;
-        }else{
-            list.add(keyValue);
-        }
+
+        list.add(keyValue);
 
         mapSize++;
     }
@@ -45,12 +40,20 @@ public class CustomHashMap<T, V> {
     }
 
 
-    private void throwExceptionWhenKeyExists(T key, LinkedList<KeyValue<T, V>> list) {
-        if(list == null) {
-            return;
+    public void remove(T key) throws KeyNotFoundException {
+        int hash = key.hashCode();
+        int index = hash % mapCapacity;
+        LinkedList<KeyValue<T,V>> list = map[index];
+        for(int i = list.size() -1; i >= 0; i--) {
+            if(list.get(i).getKey().equals(key)) {
+                list.remove(i);
+            }
         }
-        for(KeyValue keyValue : list) {
+        throw new KeyNotFoundException("Key not found!");
+    }
 
+    private void throwExceptionWhenKeyExists(T key, LinkedList<KeyValue<T, V>> list) {
+        for(KeyValue keyValue : list) {
             if(keyValue.getKey().equals(key)) {
                 throw new KeyAlreadyExistsException("Key already exists in the map!");
             }
@@ -62,6 +65,9 @@ public class CustomHashMap<T, V> {
             mapCapacity = mapCapacity * 2;
             LinkedList<KeyValue<T,V>>[] temp = map.clone();
             map = Arrays.copyOf(temp, mapCapacity);
+            for(int i = mapSize; mapSize < mapCapacity; i++) {
+                map[i] = new LinkedList<>();
+            }
         }
     }
 
