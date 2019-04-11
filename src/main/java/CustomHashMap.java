@@ -15,7 +15,7 @@ public class CustomHashMap<T, V> {
 
     public void add(T key, V value) {
         int hash = key.hashCode();
-        int index = hash % mapCapacity;
+        int index = Math.floorMod(hash, mapCapacity);
         LinkedList<KeyValue<T,V>> list = map[index];
         resizeMap();
 
@@ -30,13 +30,14 @@ public class CustomHashMap<T, V> {
 
     public V getValue(T key) throws KeyNotFoundException{
         int hash = key.hashCode();
-        int index = hash % mapCapacity;
+        int index = Math.floorMod(hash, mapCapacity);
         LinkedList<KeyValue<T,V>> list = map[index];
         for(KeyValue<T, V> keyValue : list) {
             if(keyValue.getKey().equals(key)) {
                 return keyValue.getValue();
             }
         }
+
         throw new KeyNotFoundException("Key not found!");
     }
 
@@ -61,7 +62,7 @@ public class CustomHashMap<T, V> {
     private void throwExceptionWhenKeyExists(T key, LinkedList<KeyValue<T, V>> list) {
         for(KeyValue keyValue : list) {
             if(keyValue.getKey().equals(key)) {
-                throw new KeyAlreadyExistsException("Key already exists in the map!");
+                throw new KeyAlreadyExistsException("Key already exists in the map!"); //change
             }
         }
     }
